@@ -58,3 +58,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# 유저 세팅
+/[Uu]ser[Ss]ettings/
+
