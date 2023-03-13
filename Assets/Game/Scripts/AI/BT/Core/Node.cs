@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 
 
+// ReSharper disable once InvalidXmlDocComment
 /**
  * 참고 문헌
  * https://medium.com/geekculture/how-to-create-a-simple-behaviour-tree-in-unity-c-3964c84c060e
  */
 
-namespace Game.Scripts.AI.BT
+
+namespace Game.Scripts.AI.BT.Core
 {
     public enum NodeState
     {
@@ -25,8 +27,7 @@ namespace Game.Scripts.AI.BT
 
         protected List<Node> Children = new List<Node>();
 
-        private Dictionary<string, object> _DataContext =
-            new Dictionary<string, object>();
+        private Dictionary<string, object> _DataContext = new Dictionary<string, object>();
 
         public Node()
         {
@@ -46,7 +47,7 @@ namespace Game.Scripts.AI.BT
             node.Parent = this;
             Children.Add(node);
         }
-        
+
         public void SetData(string key, object value)
         {
             _DataContext[key] = value;
@@ -59,7 +60,48 @@ namespace Game.Scripts.AI.BT
                 return value;
             }
 
+            Node node = Parent;
+
+            while (node != null)
+            {
+                value = node.GetData(key);
+                if (value != null)
+                    return value;
+                node = node.Parent;
+            }
+
             return null;
+        }
+
+        public bool ClearData(string key)
+        {
+            if (_DataContext.ContainsKey(key))
+            {
+                _DataContext.Remove(key);
+                return true;
+            }
+
+            Node node = Parent;
+            while (node != null)
+            {
+                bool cleared = node.ClearData(key);
+                if (cleared)
+                    return true;
+                node = node.Parent;
+            }
+
+            return false;
+        }
+
+        public Node GetRoot()
+        {
+            Node node = this;
+            while (node.Parent != null)
+            {
+                node = node.Parent;
+            }
+
+            return node;
         }
 
         public virtual NodeState Evaluate() => NodeState.ENS_FAILURE;
