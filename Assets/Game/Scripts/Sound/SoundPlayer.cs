@@ -28,6 +28,6 @@ public class SoundPlayer : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         _audioSource.mute = true;
-        PoolManager.Instance.Despawn(gameObject);
+        // PoolManager.Instance.Despawn(gameObject);
     }
 }

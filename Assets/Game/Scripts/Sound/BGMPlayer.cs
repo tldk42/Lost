@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Game.Scripts.Managers;
 using UnityEngine;
 
 public class BGMPlayer : MonoBehaviour
@@ -16,7 +17,7 @@ public class BGMPlayer : MonoBehaviour
     {
         _audioSource.loop = true;
         _audioSource.clip = clip;
-        _audioSource.volume = volume * SoundManager.Instance.masterVolumeBGM;
+        _audioSource.volume = volume * SoundManager.Instance.MasterVolumeFX;
         originalVolume = volume;
         _audioSource.Play();
     }
@@ -28,21 +29,21 @@ public class BGMPlayer : MonoBehaviour
 
     public void LerpMute()
     {
-        _audioSource.DOFade(0f, SoundManager.Instance.bgmLerpDuration);
+        _audioSource.DOFade(0f, SoundManager.Instance.BGMLerpDuration);
     }
     
     public void UnMute()
     {
-        _audioSource.volume = originalVolume * SoundManager.Instance.masterVolumeBGM;
+        _audioSource.volume = originalVolume * SoundManager.Instance.MasterVolumeBGM;
     }
 
     public void LerpUnMute()
     {
-        _audioSource.DOFade(originalVolume * SoundManager.Instance.masterVolumeBGM, SoundManager.Instance.bgmLerpDuration);
+        _audioSource.DOFade(originalVolume * SoundManager.Instance.MasterVolumeBGM, SoundManager.Instance.BGMLerpDuration);
     }
 
     public void SetVolume()
     {
-        _audioSource.DOFade(originalVolume * SoundManager.Instance.masterVolumeBGM, SoundManager.Instance.bgmLerpDuration);
+        _audioSource.DOFade(originalVolume * SoundManager.Instance.MasterVolumeBGM, SoundManager.Instance.BGMLerpDuration);
     }
 }
