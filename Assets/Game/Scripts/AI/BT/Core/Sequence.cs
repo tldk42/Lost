@@ -4,14 +4,17 @@ namespace Game.Scripts.AI.BT.Core
 {
     public class Sequence : Node
     {
-        public Sequence()
+   
+
+        public Sequence(string name = null) : base(name)
         {
         }
 
-        public Sequence(List<Node> children) : base(children)
+        public Sequence( List<Node> children) : base("Sequence", children)
         {
         }
 
+        /** Sequence Node는 실패하면 BT의 상단으로 복귀 성공하면 다음 노드 평가 */
         public override NodeState Evaluate()
         {
             bool anyChildIsRunning = false;

@@ -5,7 +5,13 @@ namespace Game.Scripts.AI.Zombie
 {
     public class TaskPatrol : Node
     {
+        #region 애니메이션 캐시 변수
+
         private static readonly int ShouldMove = Animator.StringToHash("ShouldMove");
+
+        #endregion
+
+        #region 필수 변수
 
         private readonly ZombieBT _Owner;
         private readonly Animator _Animator;
@@ -13,12 +19,18 @@ namespace Game.Scripts.AI.Zombie
         private readonly Transform _Transform;
         private readonly Transform[] _WayPoints;
 
+        #endregion
+
+        #region 속성
+
         private int _CurrentWaypointIndex = 0;
-        private readonly float _WaitTime = 1f;
+        private float _WaitTime = 1f;
         private float _WaitCounter = 0f;
         private bool _IsWaiting;
 
-        public TaskPatrol(Transform transform, Transform[] wayPoints)
+        #endregion
+
+        public TaskPatrol(Transform transform, Transform[] wayPoints) : base("Patrol")
         {
             _Owner = transform.GetComponent<ZombieBT>();
             _Animator = transform.GetComponent<Animator>();
@@ -26,6 +38,11 @@ namespace Game.Scripts.AI.Zombie
             _WayPoints = wayPoints;
         }
 
+        /**
+         * 1. 목표 지점에서 대기 상태 -> WaitTime만큼 대기
+         * 2. 목표 지점에 도착 상태 -> 목표지점 Index + 1, Wait Flag 켜기
+         * 3. 목표 지점에 가는 상태 -> 이동시키기
+         */
         public override NodeState Evaluate()
         {
             if (_IsWaiting)
@@ -39,10 +56,10 @@ namespace Game.Scripts.AI.Zombie
             }
             else
             {
-                Transform waypoint = _WayPoints[_CurrentWaypointIndex];
-                if (Vector3.Distance(_Transform.position, waypoint.position) < 0.01f)
+                Vector3 waypointPosition = _WayPoints[_CurrentWaypointIndex].position;
+                if (Vector3.Distance(_Transform.position, waypointPosition) < 0.01f)
                 {
-                    _Transform.position = waypoint.position;
+                    _Transform.position = waypointPosition;
                     _WaitCounter = 0f;
                     _IsWaiting = true;
 
@@ -52,13 +69,12 @@ namespace Game.Scripts.AI.Zombie
                 }
                 else
                 {
-                    var position = waypoint.position;
                     _Transform.position = Vector3.MoveTowards(
                         _Transform.position,
-                        position,
+                        waypointPosition,
                         _Owner.Speed * Time.deltaTime);
                     _Animator.SetBool(ShouldMove, true);
-                    _Transform.LookAt(position);
+                    _Transform.LookAt(waypointPosition);
                 }
             }
 

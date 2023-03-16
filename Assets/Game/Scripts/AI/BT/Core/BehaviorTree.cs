@@ -1,21 +1,22 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game.Scripts.AI.BT.Core
 {
     public abstract class BehaviorTree : MonoBehaviour
     {
-        private Node _Root = null;
-        [SerializeField] private Node _CurrentNode = null;
+        [SerializeField, ReadOnly]private Node Root;
 
         protected void Start()
         {
-            _Root = SetupTree();
-            _CurrentNode = null;
+            Root = SetupTree();
         }
 
+        /** 매 프레임 자식 노드들을 evaluate */
         private void Update()
         {
-            _Root?.Evaluate();
+            Root?.Evaluate();
         }
 
         protected abstract Node SetupTree();

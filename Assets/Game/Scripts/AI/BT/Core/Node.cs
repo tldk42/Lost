@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 // ReSharper disable once InvalidXmlDocComment
 /**
  * 참고 문헌
  * https://medium.com/geekculture/how-to-create-a-simple-behaviour-tree-in-unity-c-3964c84c060e
  */
-
 
 namespace Game.Scripts.AI.BT.Core
 {
@@ -17,25 +18,37 @@ namespace Game.Scripts.AI.BT.Core
         ENS_FAILURE,
     }
 
+    [Serializable]
     public class Node
     {
+        [SerializeField] private string Name;
+
         /** 이 노드의 상태 */
-        protected NodeState State;
+        [SerializeField]protected NodeState State;
 
         /** 부모 및 자식 노드 */
         public Node Parent;
 
-        protected List<Node> Children = new List<Node>();
+        [SerializeField] protected List<Node> Children = new List<Node>();
 
+        /** 이 노드의 추가 정보 (Target등) */
         private Dictionary<string, object> _DataContext = new Dictionary<string, object>();
+
 
         public Node()
         {
+            Name = null;
+            Parent = null;
+        }
+        public Node(string name)
+        {
+            Name = name;
             Parent = null;
         }
 
-        public Node(List<Node> children)
+        public Node(string name, List<Node> children)
         {
+            Name = name;
             foreach (var child in children)
             {
                 _Attach(child);

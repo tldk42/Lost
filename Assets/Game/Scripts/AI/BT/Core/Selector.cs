@@ -4,14 +4,16 @@ namespace Game.Scripts.AI.BT.Core
 {
     public class Selector : Node
     {
-        public Selector()
+ 
+        public Selector(string name = null) : base(name)
         {
         }
 
-        public Selector(List<Node> children) : base(children)
+        public Selector( List<Node> children) : base("Selector", children)
         {
         }
 
+        /** Selector는  children 중에서 성공(SUCCESS | RUNNING)한 Node로 진입 */
         public override NodeState Evaluate()
         {
             foreach (var node in Children)

@@ -5,33 +5,53 @@ namespace Game.Scripts.AI.Zombie
 {
     public class CheckEnemyInRange : Node
     {
-        
-        // TODO: Animator를 노드마다 가질것인가?
-        private static int _EnemyLayerMask = 1 << 6;
+        #region 애니메이션 캐시 변수
 
-        private Transform _Transform;
+        private static readonly int ShouldMove = Animator.StringToHash("ShouldMove");
 
-        public CheckEnemyInRange(Transform transform)
+        #endregion
+
+        #region 필수 변수
+
+        private readonly ZombieBT _Owner;
+        private readonly Animator _Animator;
+
+        private readonly Transform _Transform;
+
+        #endregion
+
+        #region 속성
+
+        private const int ENEMY_LAYER_MASK = 1 << 6;
+
+        #endregion
+
+        public CheckEnemyInRange(Transform transform) : base("Check Enemy")
         {
+            _Owner = transform.GetComponent<ZombieBT>();
+            _Animator = transform.GetComponent<Animator>();
             _Transform = transform;
         }
 
         public override NodeState Evaluate()
         {
-            object target = GetData("Target");
-            if (target == null)
-            {
-                Collider[] colliders = Physics.OverlapSphere(
-                    _Transform.position, 6, _EnemyLayerMask);
+            var targetPlayer = GetData("Target");
 
-                if (colliders.Length > 0)
-                {
-                    Parent.Parent.SetData("Target", colliders[0].transform);
-                    // TODO: Animator 변수 상황에 맞게 변경
-                    State = NodeState.ENS_SUCCESS;
-                    return State;
-                }
+
+            Collider[] colliders = Physics.OverlapSphere(
+                _Transform.position, 6, ENEMY_LAYER_MASK);
+
+            // Collider[] colliders = { };
+            // Physics.OverlapSphereNonAlloc(_Transform.position, _Owner.FOVRange, colliders, ENEMY_LAYER_MASK);
+
+            if (colliders.Length > 0)
+            {
+                Parent.Parent.SetData("Target", colliders[0].transform);
+                _Animator.SetBool(ShouldMove, true);
+                State = NodeState.ENS_SUCCESS;
+                return State;
             }
+
 
             State = NodeState.ENS_FAILURE;
             return State;
