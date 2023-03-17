@@ -19,7 +19,7 @@ namespace Game.Scripts.Managers
 
         [ReadOnly] private AudioClip[] _BGMClips;
         [ReadOnly] private AudioClip[] _AudioClips;
-
+                                    
         [ReadOnly] private Dictionary<string, AudioClip> _AudioClipsMap = new Dictionary<string, AudioClip>();
         [ReadOnly] private Dictionary<string, AudioClip> _BGMClipMap = new Dictionary<string, AudioClip>();
         [ReadOnly] private Dictionary<string, BGMPlayer> _BGMPlayers = new Dictionary<string, BGMPlayer>();
