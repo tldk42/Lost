@@ -1,33 +1,37 @@
 using System.Collections;
+using Game.Scripts.Managers;
 using UnityEngine;
 
-public class SoundPlayer : MonoBehaviour
+namespace Game.Scripts.Sound
 {
-    public AudioSource _audioSource;
-    private void Awake()
+    public class SoundPlayer : MonoBehaviour
     {
-        _audioSource = GetComponent<AudioSource>();
-    }
+        public AudioSource AudioSource;
+        private void Awake()
+        {
+            AudioSource = GetComponent<AudioSource>();
+        }
 
-    public void SoundPlayOneShot(AudioClip clip, float volume)
-    {
-        StartCoroutine(DespawnSound(clip.length));
-        _audioSource.mute = false;
-        _audioSource.PlayOneShot(clip, volume);
-    }
+        public void SoundPlayOneShot(AudioClip clip, float volume)
+        {
+            StartCoroutine(DespawnSound(clip.length));
+            AudioSource.mute = false;
+            AudioSource.PlayOneShot(clip, volume);
+        }
     
-    public void SoundPlayLoop(AudioClip clip, float volume)
-    {
-        _audioSource.clip = clip;
-        _audioSource.volume = volume;
-        _audioSource.loop = true;
-        _audioSource.Play();
-    }
+        public void SoundPlayLoop(AudioClip clip, float volume)
+        {
+            AudioSource.clip = clip;
+            AudioSource.volume = volume;
+            AudioSource.loop = true;
+            AudioSource.Play();
+        }
 
-    IEnumerator DespawnSound(float time)
-    {
-        yield return new WaitForSeconds(time);
-        _audioSource.mute = true;
-        // PoolManager.Instance.Despawn(gameObject);
+        IEnumerator DespawnSound(float time)
+        {
+            yield return new WaitForSeconds(time);
+            AudioSource.mute = true;
+            PoolManager.Instance.Despawn(gameObject);
+        }
     }
 }

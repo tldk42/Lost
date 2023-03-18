@@ -4,11 +4,6 @@ namespace Game.Scripts.AI.BT.Core
 {
     public class Sequence : Node
     {
-   
-
-        public Sequence(string name = null) : base(name)
-        {
-        }
 
         public Sequence( List<Node> children) : base("Sequence", children)
         {

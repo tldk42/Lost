@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using Game.Scripts.AI.BT.Core;
+﻿using Game.Scripts.AI.BT.Core;
 using UnityEngine;
 
-namespace Game.Scripts.AI.Zombie
+namespace Game.Scripts.AI.Zombie.Action
 {
     public class ChaseTarget : Node
     {
         #region 필수 변수
 
-        private readonly ZombieBT _Owner;
+        private readonly Zombie _Owner;
 
         private readonly Transform _Transform;
 
@@ -16,7 +15,7 @@ namespace Game.Scripts.AI.Zombie
 
         public ChaseTarget( Transform transform) : base("Chase")
         {
-            _Owner = transform.GetComponent<ZombieBT>();
+            _Owner = transform.GetComponent<Zombie>();
             _Transform = transform;
         }
 
@@ -29,7 +28,7 @@ namespace Game.Scripts.AI.Zombie
                 _Transform.position = Vector3.MoveTowards(
                     _Transform.position,
                     targetPosition,
-                    _Owner.Speed * Time.deltaTime);
+                    _Owner.Data.Speed * Time.deltaTime);
                 _Transform.LookAt(targetPosition);
             }
 

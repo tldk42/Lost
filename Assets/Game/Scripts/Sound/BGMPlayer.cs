@@ -1,49 +1,50 @@
 using DG.Tweening;
 using Game.Scripts.Managers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BGMPlayer : MonoBehaviour
 {
-    public AudioSource _audioSource;
-    private Transform _transform;
-    private float originalVolume;
+     public AudioSource AudioSource;
+    private Transform _Transform;
+    private float _OriginalVolume;
     private void Awake()
     {
-        _audioSource = GetComponent<AudioSource>();
-        _transform = GetComponent<Transform>();
+        AudioSource = GetComponent<AudioSource>();
+        _Transform = GetComponent<Transform>();
     }
 
     public void Play(AudioClip clip, float volume)
     {
-        _audioSource.loop = true;
-        _audioSource.clip = clip;
-        _audioSource.volume = volume * SoundManager.Instance.MasterVolumeFX;
-        originalVolume = volume;
-        _audioSource.Play();
+        AudioSource.loop = true;
+        AudioSource.clip = clip;
+        AudioSource.volume = volume * SoundManager.Instance.MasterVolumeFX;
+        _OriginalVolume = volume;
+        AudioSource.Play();
     }
 
     public void Mute()
     {
-        _audioSource.volume = 0f;
+        AudioSource.volume = 0f;
     }
 
     public void LerpMute()
     {
-        _audioSource.DOFade(0f, SoundManager.Instance.BGMLerpDuration);
+        AudioSource.DOFade(0f, SoundManager.Instance.BGMLerpDuration);
     }
     
     public void UnMute()
     {
-        _audioSource.volume = originalVolume * SoundManager.Instance.MasterVolumeBGM;
+        AudioSource.volume = _OriginalVolume * SoundManager.Instance.MasterVolumeBGM;
     }
 
     public void LerpUnMute()
     {
-        _audioSource.DOFade(originalVolume * SoundManager.Instance.MasterVolumeBGM, SoundManager.Instance.BGMLerpDuration);
+        AudioSource.DOFade(_OriginalVolume * SoundManager.Instance.MasterVolumeBGM, SoundManager.Instance.BGMLerpDuration);
     }
 
     public void SetVolume()
     {
-        _audioSource.DOFade(originalVolume * SoundManager.Instance.MasterVolumeBGM, SoundManager.Instance.BGMLerpDuration);
+        AudioSource.DOFade(_OriginalVolume * SoundManager.Instance.MasterVolumeBGM, SoundManager.Instance.BGMLerpDuration);
     }
 }

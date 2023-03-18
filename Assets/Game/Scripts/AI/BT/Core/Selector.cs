@@ -4,10 +4,6 @@ namespace Game.Scripts.AI.BT.Core
 {
     public class Selector : Node
     {
- 
-        public Selector(string name = null) : base(name)
-        {
-        }
 
         public Selector( List<Node> children) : base("Selector", children)
         {

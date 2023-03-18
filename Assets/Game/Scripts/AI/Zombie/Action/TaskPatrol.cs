@@ -1,7 +1,7 @@
 ﻿using Game.Scripts.AI.BT.Core;
 using UnityEngine;
 
-namespace Game.Scripts.AI.Zombie
+namespace Game.Scripts.AI.Zombie.Action
 {
     public class TaskPatrol : Node
     {
@@ -13,7 +13,7 @@ namespace Game.Scripts.AI.Zombie
 
         #region 필수 변수
 
-        private readonly ZombieBT _Owner;
+        private readonly Zombie _Owner;
         private readonly Animator _Animator;
 
         private readonly Transform _Transform;
@@ -32,7 +32,7 @@ namespace Game.Scripts.AI.Zombie
 
         public TaskPatrol(Transform transform, Transform[] wayPoints) : base("Patrol")
         {
-            _Owner = transform.GetComponent<ZombieBT>();
+            _Owner = transform.GetComponent<ZombieBT>().Owner;
             _Animator = transform.GetComponent<Animator>();
             _Transform = transform;
             _WayPoints = wayPoints;
@@ -72,7 +72,7 @@ namespace Game.Scripts.AI.Zombie
                     _Transform.position = Vector3.MoveTowards(
                         _Transform.position,
                         waypointPosition,
-                        _Owner.Speed * Time.deltaTime);
+                        _Owner.Data.Speed * Time.deltaTime);
                     _Animator.SetBool(ShouldMove, true);
                     _Transform.LookAt(waypointPosition);
                 }
